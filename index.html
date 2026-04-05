@@ -10,7 +10,15 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; color: white; overflow-x: hidden; }
         
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        /* High-end SaaS Glow */
+        .bg-glow {
+            position: absolute; width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, rgba(5, 5, 5, 0) 70%);
+            top: -10%; left: -10%; z-index: -1;
+        }
+
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }
+        .glass:hover { border-color: rgba(124, 58, 237, 0.5); transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
         
         .gradient-text { background: linear-gradient(90deg, #ffffff, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
@@ -25,6 +33,7 @@
     </style>
 </head>
 <body>
+    <div class="bg-glow"></div>
 
     <nav class="fixed w-full z-50 px-6 py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center glass rounded-2xl px-6 py-3">
@@ -38,7 +47,9 @@
 
     <section class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20">
         <div data-aos="fade-up">
-            <span class="px-4 py-1 rounded-full border border-purple-500/30 text-purple-400 text-sm mb-6 inline-block">4+ Premium Servers Delivered</span>
+            <span class="px-4 py-1 rounded-full border border-purple-500/30 text-purple-400 text-sm mb-6 inline-block">
+                <span id="counter">0</span>+ Premium Servers Delivered
+            </span>
             <h1 class="text-6xl md:text-8xl font-extrabold mb-6 gradient-text">Forge Your <br>Community.</h1>
             <p class="text-gray-400 max-w-xl text-lg mb-10">High-end Discord infrastructure for competitive prices. From basic setups to advanced automation, we build the foundation for your success.</p>
             <div class="flex gap-4 justify-center">
@@ -48,7 +59,7 @@
         </div>
     </section>
 
-    <div class="py-20 border-y border-white/5 bg-white/5">
+    <div class="py-20 border-y border-white/5 bg-white/5 relative overflow-hidden">
         <div class="marquee-container">
             <div class="marquee-content">
                 <div class="marquee-item">BEST SERVERS</div>
@@ -63,14 +74,13 @@
         </div>
     </div>
 
-    <section id="pricing" class="py-32 px-6">
+    <section id="pricing" class="py-32 px-6 relative">
         <div class="max-w-7xl mx-auto text-center mb-20">
             <h2 class="text-4xl font-bold mb-4" data-aos="fade-up">Simple, Transparent Pricing</h2>
             <p class="text-gray-400">Choose the forge level that fits your community needs.</p>
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-            
             <div class="glass p-8 rounded-3xl" data-aos="fade-up" data-aos-delay="100">
                 <h3 class="text-xl font-bold mb-2">Basic Setup</h3>
                 <div class="text-3xl font-extrabold mb-6">$10 <span class="text-sm text-gray-500 font-normal">Starting</span></div>
@@ -82,9 +92,9 @@
                 <a href="https://discord.gg/ptAzQHkEzG" class="block text-center w-full py-3 rounded-xl bg-white/10 hover:bg-white hover:text-black font-bold transition-all">Buy Now</a>
             </div>
 
-            <div class="glass p-8 rounded-3xl border-purple-500/50" data-aos="fade-up" data-aos-delay="200">
-                <div class="text-purple-400 text-xs font-bold uppercase mb-2">Most Popular</div>
-                <h3 class="text-xl font-bold mb-2">Advanced Setup</h3>
+            <div class="glass p-8 rounded-3xl border-purple-500/50 relative overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                <div class="absolute top-0 right-0 bg-purple-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg">POPULAR</div>
+                <h3 class="text-xl font-bold mb-2 pt-2">Advanced Setup</h3>
                 <div class="text-3xl font-extrabold mb-6">$20 <span class="text-sm text-gray-500 font-normal">Starting</span></div>
                 <ul class="space-y-3 text-gray-400 text-sm mb-8">
                     <li>• Reaction Roles</li>
@@ -116,11 +126,10 @@
                 </ul>
                 <a href="https://discord.gg/ptAzQHkEzG" class="block text-center w-full py-3 rounded-xl bg-white/10 hover:bg-white hover:text-black font-bold transition-all">Contact Us</a>
             </div>
-
         </div>
     </section>
 
-    <footer class="py-20 border-t border-white/5 text-center">
+    <footer class="py-20 border-t border-white/5 text-center bg-black">
         <img src="https://i.ibb.co/cSnC5Lht/Screenshot-2026-04-05-5-24-28-AM.png" alt="Logo" class="h-12 mx-auto mb-6 opacity-50 grayscale hover:grayscale-0 transition-all">
         <p class="text-gray-500 text-sm">© 2026 ServerForge. All rights reserved.</p>
     </footer>
@@ -128,6 +137,21 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({ duration: 1000, once: true });
+
+        // Small JS for the number counter
+        let count = 0;
+        const target = 4;
+        const speed = 200;
+        const counter = document.getElementById('counter');
+        
+        const updateCount = () => {
+            if(count < target) {
+                count++;
+                counter.innerText = count;
+                setTimeout(updateCount, speed);
+            }
+        }
+        updateCount();
     </script>
 </body>
 </html>
